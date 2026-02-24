@@ -1,0 +1,4 @@
+[build]
+  command = "npm run build"
+  publish = "dist/02-pokemon-ssr/browser"
+
