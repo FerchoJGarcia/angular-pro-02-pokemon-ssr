@@ -4,8 +4,30 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
+import {
+  setAngularAppEngineManifest,
+  setAngularAppManifest,
+  type AngularAppEngineManifest,
+  type AngularAppManifest,
+} from '@angular/ssr';
 import express from 'express';
 import { join } from 'node:path';
+
+const loadManifests = async () => {
+  const [appManifestModule, appEngineManifestModule] = await Promise.all([
+    import(new URL('./angular-app-manifest.mjs', import.meta.url).href) as Promise<{
+      default: AngularAppManifest;
+    }>,
+    import(new URL('./angular-app-engine-manifest.mjs', import.meta.url).href) as Promise<{
+      default: AngularAppEngineManifest;
+    }>,
+  ]);
+
+  setAngularAppManifest(appManifestModule.default);
+  setAngularAppEngineManifest(appEngineManifestModule.default);
+};
+
+await loadManifests();
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
