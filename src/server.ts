@@ -1,5 +1,16 @@
-import { AngularAppEngine, createRequestHandler } from '@angular/ssr';
+import {
+  AngularAppEngine,
+  createRequestHandler,
+  ɵsetAngularAppEngineManifest,
+  ɵsetAngularAppManifest,
+} from '@angular/ssr';
 import { getContext } from '@netlify/angular-runtime/context.mjs';
+
+import angularAppManifest from './angular-app-manifest.mjs';
+import angularAppEngineManifest from './angular-app-engine-manifest.mjs';
+
+ɵsetAngularAppManifest(angularAppManifest);
+ɵsetAngularAppEngineManifest(angularAppEngineManifest);
 
 const angularAppEngine = new AngularAppEngine();
 
