@@ -8,11 +8,11 @@
 /pokemons/8
 /pokemons/9
 /pokemons/10
-/pokemons?page=1
-/pokemons?page=2
-/pokemons?page=3
-/pokemons?page=4
-/pokemons?page=5
+/pokemons/page/1
+/pokemons/page/2
+/pokemons/page/3
+/pokemons/page/4
+/pokemons/page/5
 /pokemons/bulbasaur
 /pokemons/ivysaur
 /pokemons/venusaur
