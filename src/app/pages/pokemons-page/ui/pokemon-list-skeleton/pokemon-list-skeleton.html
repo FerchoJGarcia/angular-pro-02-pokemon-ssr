@@ -1,0 +1,15 @@
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4">
+  @for (pokemon of '123456789012'.split(''); track $index) {
+    <div
+      class="bg-white/25 h-44 rounded-lg shadow-2xs flex flex-col justify-center items-center p-4 cursor-pointer"
+    >
+      <div class="rounded-full animate-pulse bg-gray-300 w-24 h-24"></div>
+
+      <div class="flex text-center mt-5">
+        <div class="h-4 w-20 bg-gray-300 rounded animate-pulse"></div>
+      </div>
+    </div>
+  }
+
+  <!-- <div class="col-span-full text-center text-white/80">No hay pokémons</div> -->
+</div>
