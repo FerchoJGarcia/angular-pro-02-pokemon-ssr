@@ -1,22 +1,7 @@
-import {
-  AngularAppEngine,
-  createRequestHandler,
-  \u0275setAngularAppEngineManifest as setAngularAppEngineManifest,
-  \u0275setAngularAppManifest as setAngularAppManifest,
-} from '@angular/ssr';
+import { AngularAppEngine, createRequestHandler } from '@angular/ssr';
 import { getContext } from '@netlify/angular-runtime/context.mjs';
 
-const angularAppEnginePromise = (async () => {
-  const [appManifestModule, appEngineManifestModule] = await Promise.all([
-    import(new URL('./angular-app-manifest.mjs', import.meta.url).href),
-    import(new URL('./angular-app-engine-manifest.mjs', import.meta.url).href),
-  ]);
-
-  setAngularAppManifest(appManifestModule.default);
-  setAngularAppEngineManifest(appEngineManifestModule.default);
-
-  return new AngularAppEngine();
-})();
+const angularAppEngine = new AngularAppEngine();
 
 export async function netlifyAppEngineHandler(request: Request): Promise<Response> {
   const context = getContext();
@@ -28,7 +13,6 @@ export async function netlifyAppEngineHandler(request: Request): Promise<Respons
   //   return Response.json({ message: 'Hello from the API' });
   // }
 
-  const angularAppEngine = await angularAppEnginePromise;
   const result = await angularAppEngine.handle(request, context);
   return result || new Response('Not found', { status: 404 });
 }
