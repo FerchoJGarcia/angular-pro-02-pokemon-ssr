@@ -1,39 +1,22 @@
 import {
   AngularAppEngine,
   createRequestHandler,
-  setAngularAppEngineManifest,
-  setAngularAppManifest,
-  type AngularAppEngineManifest,
-  type AngularAppManifest,
+  \u0275setAngularAppEngineManifest as setAngularAppEngineManifest,
+  \u0275setAngularAppManifest as setAngularAppManifest,
 } from '@angular/ssr';
 import { getContext } from '@netlify/angular-runtime/context.mjs';
 
-let angularAppEngine: AngularAppEngine | null = null;
-let manifestsLoaded = false;
-
-const ensureManifestsLoaded = async () => {
-  if (manifestsLoaded) return;
-
+const angularAppEnginePromise = (async () => {
   const [appManifestModule, appEngineManifestModule] = await Promise.all([
-    import(new URL('./angular-app-manifest.mjs', import.meta.url).href) as Promise<{
-      default: AngularAppManifest;
-    }>,
-    import(new URL('./angular-app-engine-manifest.mjs', import.meta.url).href) as Promise<{
-      default: AngularAppEngineManifest;
-    }>,
+    import(new URL('./angular-app-manifest.mjs', import.meta.url).href),
+    import(new URL('./angular-app-engine-manifest.mjs', import.meta.url).href),
   ]);
 
   setAngularAppManifest(appManifestModule.default);
   setAngularAppEngineManifest(appEngineManifestModule.default);
-  manifestsLoaded = true;
-};
 
-const getAngularAppEngine = async () => {
-  if (angularAppEngine) return angularAppEngine;
-  await ensureManifestsLoaded();
-  angularAppEngine = new AngularAppEngine();
-  return angularAppEngine;
-};
+  return new AngularAppEngine();
+})();
 
 export async function netlifyAppEngineHandler(request: Request): Promise<Response> {
   const context = getContext();
@@ -45,7 +28,8 @@ export async function netlifyAppEngineHandler(request: Request): Promise<Respons
   //   return Response.json({ message: 'Hello from the API' });
   // }
 
-  const result = await (await getAngularAppEngine()).handle(request, context);
+  const angularAppEngine = await angularAppEnginePromise;
+  const result = await angularAppEngine.handle(request, context);
   return result || new Response('Not found', { status: 404 });
 }
 
