@@ -6,7 +6,9 @@ import {
 } from '@angular/ssr';
 import { getContext } from '@netlify/angular-runtime/context.mjs';
 
+// @ts-ignore
 import angularAppManifest from './angular-app-manifest.mjs';
+// @ts-ignore
 import angularAppEngineManifest from './angular-app-engine-manifest.mjs';
 
 ɵsetAngularAppManifest(angularAppManifest);
